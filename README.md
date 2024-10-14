@@ -1,6 +1,6 @@
 # downloader
 
-Simple command line utility to download files under network interruptions using async framework
+Simple utility to download files under network interruptions using async framework
 
 ## Dependencies
 - Python 3.10+
