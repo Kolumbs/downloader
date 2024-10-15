@@ -62,9 +62,10 @@ async def download_files(request: DownloadFilesRequest) -> DownloadFilesResponse
     """Download files from internet and save them to server disk."""
     stream = DownloadStream()
     tasks = []
+    url = request.url if request.url.endswith("/") else request.url + "/"
     for file in request.files_to_download:
         tasks.append(
-            execute_download_request(stream, request.url, file, request.retries)
+            execute_download_request(stream, url, file, request.retries)
         )
     results = await asyncio.gather(*tasks)
     try:

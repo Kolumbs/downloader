@@ -169,11 +169,7 @@ class DownloadStream:
             raise RuntimeError("Only HTTPS is supported")
         host = parsed_url.hostname
         port = parsed_url.port or 443
-        path = (
-            parsed_url.path
-            if parsed_url.path.endswith("/")
-            else parsed_url.path + "/"
-        )
+        path = parsed_url.path
         reader, writer = await self._get_reader_writer(host, port)
         await self._send_http_request(writer, host, path, "HEAD", "keep-alive")
         try:
