@@ -54,7 +54,7 @@ class DownloadStream:
     errors.
     """
 
-    def __init__(self, cache_dir=".", chunk_size=65536*100):
+    def __init__(self, cache_dir=".", chunk_size=65536 * 100):
         """Initialize downloader.
 
         :param cache_dir: Directory to store temporary files in.
@@ -169,7 +169,11 @@ class DownloadStream:
             raise RuntimeError("Only HTTPS is supported")
         host = parsed_url.hostname
         port = parsed_url.port or 443
-        path = parsed_url.path
+        path = (
+            parsed_url.path
+            if parsed_url.path.endswith("/")
+            else parsed_url.path + "/"
+        )
         reader, writer = await self._get_reader_writer(host, port)
         await self._send_http_request(writer, host, path, "HEAD", "keep-alive")
         try:
@@ -207,7 +211,7 @@ class DownloadStream:
                     await current.write(byte_chunk)
                     current.size += len(byte_chunk)
                     log.warning(
-                        "Downloading %s: %.2f%%", path, current.size/size * 100
+                        "Downloading %s: %.2f%%", path, current.size / size * 100
                     )
             finally:
                 await current.close()
